@@ -10,6 +10,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.provider.MediaStore;
 import android.text.TextUtils;
+import android.webkit.MimeTypeMap;
 
 import com.androidx.LogUtils;
 import com.androidx.media.MediaUriInfo;
@@ -25,7 +26,7 @@ import androidx.core.content.FileProvider;
 /**
  * user author: didikee
  * create time: 2019-12-03 09:04
- * description: 
+ * description:
  */
 public final class UriUtils {
     public static final String DATE_TAKEN = "datetaken";
@@ -86,6 +87,7 @@ public final class UriUtils {
     /**
      * 获取多媒体文件的信息
      * 先根据媒体文件的类型去获取对应的信息
+     *
      * @param context
      * @param uri
      * @return
@@ -101,7 +103,7 @@ public final class UriUtils {
         }
         if (TextUtils.isEmpty(mimeType)) {
             // mimeType = getMimeType(context, uri);
-            mimeType = queryMimeType(context.getContentResolver(), uri);
+            mimeType = queryMimeType2(context.getContentResolver(), uri);
             LogUtils.e("getMediaInfo mimeType: " + mimeType);
         }
         if (TextUtils.isEmpty(mimeType)) {
@@ -123,6 +125,7 @@ public final class UriUtils {
 
     /**
      * 获取文件的类型
+     *
      * @param context
      * @param uri
      * @return
@@ -150,6 +153,10 @@ public final class UriUtils {
             }
         }
         return mimeType;
+    }
+
+    private static String queryMimeType2(ContentResolver contentResolver, Uri uri) {
+        return contentResolver.getType(uri);
     }
 
     private static String queryMimeType(ContentResolver contentResolver, Uri uri) {
@@ -235,6 +242,7 @@ public final class UriUtils {
 
     /**
      * 旋转方向的字段在api29开始才加入，所以目前还是推荐通过媒体解析得到视频的基本媒体信息，文件信息的话倒是可以使用uri查询的形式
+     *
      * @param contentResolver
      * @param uri
      * @return
@@ -403,6 +411,7 @@ public final class UriUtils {
 
     /**
      * 获取基础的数据
+     *
      * @return
      */
     private static ArrayList<String> getCommonProjects() {
@@ -424,6 +433,7 @@ public final class UriUtils {
 
     /**
      * 调用第三方的视频播放器播放视频
+     *
      * @param activity
      * @param videoUri
      * @return
@@ -451,6 +461,7 @@ public final class UriUtils {
 
     /**
      * 对旧版api设计的获取java file的绝对路径
+     *
      * @param context
      * @param uri
      * @return
@@ -474,6 +485,7 @@ public final class UriUtils {
 
     /**
      * 这个需要测试
+     *
      * @param context
      * @param file
      * @return
@@ -494,6 +506,7 @@ public final class UriUtils {
 
     /**
      * 从asset路径创建uri
+     *
      * @param assetPath file:///android_asset/${RELATIVEPATH}
      * @return
      */
